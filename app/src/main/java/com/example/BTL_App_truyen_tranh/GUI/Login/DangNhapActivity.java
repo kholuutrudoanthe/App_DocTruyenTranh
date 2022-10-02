@@ -25,6 +25,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.BTL_App_truyen_tranh.DAO.SQLiteDAO;
 import com.example.BTL_App_truyen_tranh.DTO.TaiKhoan;
 import com.example.BTL_App_truyen_tranh.GUI.Home.HomePage;
+import com.example.BTL_App_truyen_tranh.GUI.QuanLyTruyen.HomeQuanLy;
 import com.example.BTL_App_truyen_tranh.MainActivity;
 import com.example.BTL_App_truyen_tranh.R;
 
@@ -106,14 +107,23 @@ public class DangNhapActivity extends AppCompatActivity {
         if (tk.isEmpty() || mk.isEmpty()) {
             Toast.makeText(DangNhapActivity.this, "Vui lòng điền đủ thông tin", Toast.LENGTH_SHORT).show();
         } else {
-            TaiKhoan taiKhoan=new TaiKhoan(0,tk,"",mk);
-            if (kiem_tra_dn(taiKhoan,sqLiteDAO)) {
-                Toast.makeText(DangNhapActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(DangNhapActivity.this, HomePage.class);
+            TaiKhoan taiKhoan = new TaiKhoan(0, tk, "", mk);
+            if (tk.equals("admin") && mk.equals("admin")) {
+                Intent intent = new Intent(DangNhapActivity.this, HomeQuanLy.class);
                 startActivity(intent);
+                finish();
             } else {
-                Toast.makeText(DangNhapActivity.this, "Tài khoản chưa được đăng ký", Toast.LENGTH_SHORT).show();
+                if (!kiem_tra_dn(taiKhoan, sqLiteDAO).isEmpty()) {
+                    Toast.makeText(DangNhapActivity.this, "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(DangNhapActivity.this, HomePage.class);
+                    intent.putExtra("Key_hoten", kiem_tra_dn(taiKhoan, sqLiteDAO));
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(DangNhapActivity.this, "Tài khoản chưa được đăng ký", Toast.LENGTH_SHORT).show();
+                }
             }
+
         }
 
     }
@@ -142,7 +152,7 @@ public class DangNhapActivity extends AppCompatActivity {
         edit_mat_khau = findViewById(R.id.edit_mat_khau);
         button_dang_nhap = findViewById(R.id.button_dang_nhap);
         text_dang_ky = findViewById(R.id.text_dang_ky);
-        sqLiteDAO=new SQLiteDAO(DangNhapActivity.this);
+        sqLiteDAO = new SQLiteDAO(DangNhapActivity.this);
         sqLiteDAO.getdatatk();
     }
 

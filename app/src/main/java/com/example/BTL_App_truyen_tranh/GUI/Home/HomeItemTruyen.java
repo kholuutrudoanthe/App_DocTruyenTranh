@@ -1,5 +1,10 @@
 package com.example.BTL_App_truyen_tranh.GUI.Home;
 
+import static com.example.BTL_App_truyen_tranh.DAO.ChapTruyenDAO.getall_chap;
+import static com.example.BTL_App_truyen_tranh.GUI.Home.HomePage.sqLiteDAO1;
+
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,17 +12,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.BTL_App_truyen_tranh.BUS.Utils;
+import com.example.BTL_App_truyen_tranh.DTO.Chap;
+import com.example.BTL_App_truyen_tranh.DTO.TruyenTranh;
+import com.example.BTL_App_truyen_tranh.GUI.ThongTinTruyen.ThongTinTuyen;
 import com.example.BTL_App_truyen_tranh.R;
 
 import java.util.List;
 
 public class HomeItemTruyen extends RecyclerView.Adapter<HomeItemTruyen.HomeItemTruyenHolder> {
-    private List<String> listTruyen;
+    private List<TruyenTranh> listTruyen;
+    private Context context;
 
-    public HomeItemTruyen(List<String> listTruyen) {
+    public HomeItemTruyen(List<TruyenTranh> listTruyen, Context context) {
         this.listTruyen = listTruyen;
+        this.context = context;
     }
 
     @NonNull
@@ -29,8 +41,19 @@ public class HomeItemTruyen extends RecyclerView.Adapter<HomeItemTruyen.HomeItem
 
     @Override
     public void onBindViewHolder(@NonNull HomeItemTruyenHolder holder, int position) {
-        String name = listTruyen.get(position);
-        holder.textName.setText(name);
+        TruyenTranh truyenTranh = listTruyen.get(position);
+        List<Chap>list=getall_chap(truyenTranh.getIdTruyen(),sqLiteDAO1);
+        holder.textName.setText(truyenTranh.getTenTruyen());
+        holder.textChap.setText(list.get(list.size()-1).getTenChap());
+        holder.imageViewAnh.setImageBitmap(Utils.getImage(truyenTranh.getImg()));
+        holder.card_item_truyen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, ThongTinTuyen.class);
+                intent.putExtra("Key_idTruyen", truyenTranh.getIdTruyen());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -45,12 +68,14 @@ public class HomeItemTruyen extends RecyclerView.Adapter<HomeItemTruyen.HomeItem
         private ImageView imageViewAnh;
         private TextView textName;
         private TextView textChap;
+        private CardView card_item_truyen;
 
         public HomeItemTruyenHolder(@NonNull View itemView) {
             super(itemView);
             imageViewAnh = itemView.findViewById(R.id.imageViewAnh);
             textName = itemView.findViewById(R.id.textName);
             textChap = itemView.findViewById(R.id.textChap);
+            card_item_truyen = itemView.findViewById(R.id.card_item_truyen);
         }
     }
 }
