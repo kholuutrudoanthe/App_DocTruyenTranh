@@ -26,20 +26,20 @@ public class SQLiteDAO extends SQLiteOpenHelper {
         get_data("create Table IF NOT EXISTS taikhoan(idtk INTEGER PRIMARY KEY AUTOINCREMENT,tk nvarchar(50), hoten nvarchar(50),mk nvarchar(50))");
     }
 
-    public void getdatadm() {
-        get_data("CREATE TABLE IF NOT EXISTS danhmuc(iddm INTEGER PRIMARY KEY AUTOINCREMENT,tendm nvarchar(500),hinhanh nvarchar(500))");
+    public void getdatatl() {
+        get_data("CREATE TABLE IF NOT EXISTS theloai(idtl INTEGER PRIMARY KEY AUTOINCREMENT,tentl text)");
     }
 
-    public void getdatasanpham() {
-        get_data("create Table IF NOT EXISTS sanpham(idsp INTEGER PRIMARY KEY AUTOINCREMENT,iddm INTEGER,tensp nvarchar(50) , thuonghieu nvarchar(50), chitiet nvarchar(50) ,giatien INTEGER, hinhanh nvarchar(50))");
+    public void getdataTruyenTranh() {
+        get_data("create Table IF NOT EXISTS truyentranh(idtt INTEGER PRIMARY KEY AUTOINCREMENT,tenTruyen text,ngayDang text , tinhTrang text, theLoai text ,gioiThieu text, img blob)");
     }
 
-    public void getdatagiohang() {
-        get_data("create Table IF NOT EXISTS giohang(idgh INTEGER PRIMARY KEY AUTOINCREMENT,idtk INTEGER, idsp INTEGER,sl INTEGER,tongtien INTEGER,trangthai INTEGER)");
-    }
 
-    public void getdatadonhang() {
-        get_data("create Table IF NOT EXISTS donhang(iddh INTEGER PRIMARY KEY AUTOINCREMENT,idgh INTEGER, idtk INTEGER,loinhan nvarchar(500))");
+    public void getdataChap() {
+        get_data("create Table IF NOT EXISTS chap(idChap INTEGER PRIMARY KEY AUTOINCREMENT,idtt INTEGER,tenChap text)");
+    }
+    public void getdataImgChap() {
+        get_data("create Table IF NOT EXISTS imgchap(idimgChap INTEGER PRIMARY KEY AUTOINCREMENT,idtt INTEGER,tenChap text,img blob)");
     }
 
     @Override
